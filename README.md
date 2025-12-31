@@ -1,6 +1,6 @@
 # Bitcoin price Alarm
 
-Frequently check the price and plays a sound if price jumps or drops by more than a limit.
+Frequently checks the price and plays a sound if price jumps or drops by more than a limit.
 
 ## Requirements
 ```bash
