@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Crypto price alarm</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+
+        ul {
+            text-align: left;
+            margin-left: 45%;
+            padding-left: 20px;
+        }
+
+        .submit-button {
+            margin-top: 2%;
+            width: 15%;
+            height: 10%;
+            font-size: medium;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Price limits</h1>
+        <form method="post">
+            Below: <input type="number" name="below"><br>
+            Above: <input type="number" name="above"><br>
+            <button type="submit" class="submit-button">Submit</button>
+            <br><br>
+            <ul>
+                {% for limit in alarm.limits %}
+                <input type="checkbox" name="remove" value="{{ limit }}">
+                <li>{{ ("Above " if alarm.limits[limit] == "above" else "Below ") ~ limit }}</li>
+                {% endfor %}
+            </ul>
+        </form>
+    </div>
+</body>
+
+</html>
