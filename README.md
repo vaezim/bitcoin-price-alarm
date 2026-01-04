@@ -5,6 +5,7 @@ Frequently checks the price and plays a sound if price jumps above or drops belo
 ## Requirements
 ```bash
 python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 sudo apt install mpg123
 ```
