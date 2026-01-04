@@ -12,8 +12,8 @@ class CryptoPriceAlarm:
         self.last_time_sound_played = 0
         self.MIN_TIME_BETWEEN_SOUND_PLAYS = 10 * 60  # seconds
 
-        # Keys: price limit (int) => Value: "above" | "below"
-        self.limits = {}
+        self.above_limits = []
+        self.below_limits = []
 
     def run(self):
         price = self.get_current_price()
@@ -50,14 +50,14 @@ class CryptoPriceAlarm:
         ):
             return
         sound_played = False
-        for limit in self.limits:
-            sign = self.limits[limit].lower()
-            if "above" in sign and price > limit:
+        for limit in self.above_limits:
+            if price > limit:
                 self.play_sound(
                     f"UP! Price jumped above {limit} limit. Current price is {price}."
                 )
                 sound_played = True
-            elif "below" in sign and price < limit:
+        for limit in self.below_limits:
+            if price < limit:
                 self.play_sound(
                     f"DOWN! Price dropped below {limit} limit. Current price is {price}."
                 )
@@ -92,20 +92,28 @@ if __name__ == "__main__":
         if flask.request.method == "POST":
 
             # Remove the limit if its checkbox is checked
-            remove_list = flask.request.form.getlist("remove")
+            remove_list = flask.request.form.getlist("remove_above")
             for _limit in remove_list:
                 limit = int(_limit)
-                alarm.limits.pop(limit)
+                if limit in alarm.above_limits:
+                    alarm.above_limits.remove(limit)
+            remove_list = flask.request.form.getlist("remove_below")
+            for _limit in remove_list:
+                limit = int(_limit)
+                if limit in alarm.below_limits:
+                    alarm.below_limits.remove(limit)
 
-            # Add below and above limits to alarm.limits
+            # Add below and above limits to alarm
             above = flask.request.form["above"]
             above = int(above) if len(above) else None
             below = flask.request.form["below"]
             below = int(below) if len(below) else None
             if above:
-                alarm.limits[above] = "above"
+                alarm.above_limits.append(above)
+                alarm.above_limits.sort()
             if below:
-                alarm.limits[below] = "below"
+                alarm.below_limits.append(below)
+                alarm.below_limits.sort()
         return flask.render_template_string(HTML, alarm=alarm)
 
     app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=False)

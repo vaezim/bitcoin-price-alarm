@@ -8,6 +8,20 @@
             text-align: center;
         }
 
+        .table-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+
         ul {
             text-align: left;
             margin-left: 45%;
@@ -31,12 +45,41 @@
             Above: <input type="number" name="above"><br>
             <button type="submit" class="submit-button">Submit</button>
             <br><br>
-            <ul>
-                {% for limit in alarm.limits %}
-                <input type="checkbox" name="remove" value="{{ limit }}">
-                <li>{{ ("Above " if alarm.limits[limit] == "above" else "Below ") ~ limit }}</li>
-                {% endfor %}
-            </ul>
+
+            <div class="table-container">
+                <!-- Above limits -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Above Limits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for limit in alarm.above_limits %}
+                        <tr>
+                            <td><input type="checkbox" name="remove_above" value="{{ limit }}"> {{ limit }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Below limits -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Below Limits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for limit in alarm.below_limits %}
+                        <tr>
+                            <td><input type="checkbox" name="remove_below" value="{{ limit }}"> {{ limit }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         </form>
     </div>
 </body>
